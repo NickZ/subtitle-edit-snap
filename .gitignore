@@ -1,0 +1,6 @@
+**/tmp*/**
+*.snap
+__pycache__
+*.blob
+*.log
+*.trace
