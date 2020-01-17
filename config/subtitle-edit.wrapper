@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#this is to prevent vlc from crashing
+VENDOR=$(glxinfo | grep "OpenGL vendor")
+
+if [[ $VENDOR == *"Intel"* ]]; then
+  export VDPAU_DRIVER_PATH="$SNAP/usr/lib/$ARCH/dri"
+  export LIBVA_DRIVERS_PATH="$SNAP/usr/lib/$ARCH/dri"
+fi
+
+if [[ $VENDOR == *"NVIDIA"* ]]; then
+  export VDPAU_DRIVER_PATH="/var/lib/snapd/lib/gl/vdpau"
+elif [[ $VENDOR == *"X.Org"* ]]; then
+  export VDPAU_DRIVER_PATH="/usr/lib/$ARCH/vdpau/"
+fi
+#vlc stuff
+
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$SNAP/usr/lib/vlc"
+
+if [[ ! -d $SNAP_USER_DATA/tessdata ]]; then
+    cp -R $SNAP/share/tessdata $SNAP_USER_DATA
+fi
+mkdir $SNAP_USER_DATA/tmp
+echo "LD Library path is: "
+echo $LD_LIBRARY_PATH
+echo "PATH is: "
+echo $PATH
+mono $@ $SNAP/subedit/SubtitleEdit.exe

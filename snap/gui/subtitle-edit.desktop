@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Subtitle Edit
+Comment=The subtitle editor :)
+GenericName=Subtitle Editor
+Exec=subtitle-edit
+Icon=${SNAP}/meta/gui/subtitle-edit.png
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;Development;RevisionControl;
+MimeType=text/plain;

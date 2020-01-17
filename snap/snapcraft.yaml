@@ -1,0 +1,162 @@
+name: subtitle-edit
+version: '3.5.11-1'
+grade: stable
+confinement: devmode
+base: core18
+summary: Subtitle Edit
+description: Subtitle Edit 
+
+layout:
+  /usr/share/.mono:
+    bind: $SNAP_COMMON/.mono
+  /usr/bin/vlc:
+    bind-file: $SNAP/usr/bin/vlc
+
+environment:
+  DATA_FOLDER_OVERRIDE: $SNAP_USER_DATA
+  TMP: $SNAP_USER_DATA/tmp
+  TEMP: $SNAP_USER_DATA/tmp
+  TMPDIR: $SNAP_USER_DATA/tmp
+  TESSERACT4_OVERRIDE: $SNAP_USER_DATA/tessdata
+  MONO_CONFIG: $SNAP/etc/mono/config
+  MONO_GAC_PREFIX: $SNAP/usr/lib/mono
+
+apps:
+  subtitle-edit:
+    adapter: full
+    command: bin/subtitle-edit
+    command-chain:
+      - bin/desktop-launch
+      - bin/snapcraft-preload
+    common-id: com.nikse.subtitle-edit
+    plugs:
+    - "alsa"
+    - "audio-playback"
+    - "home"
+    - "desktop"
+    - "desktop-legacy"
+    - "network"
+    - "network-bind"
+    - "opengl"
+    - "pulseaudio"
+    - "removable-media"
+    - "x11"
+    - "wayland"
+
+parts:
+  mono:
+    plugin: myplugin
+    stage-packages:
+    - mono-complete
+    - libmono-corlib4.5-cil
+    - libmono-system-windows-forms4.0-cil
+    - libmono-system-runtime4.0-cil
+    - fontconfig-config
+    - libgdiplus
+    - libcairo2
+    - libglib2.0-0
+    - libglib2.0-cil
+    - libgtk2.0-0
+    - fonts-freefont-ttf
+
+  desktop-gtk2:
+    after: ["snapcraft-preload"]
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    plugin: make
+    make-parameters: ["FLAVOR=gtk2"]
+    build-packages:
+      - build-essential
+      - libgtk2.0-dev
+    stage-packages:
+      - libxkbcommon0  # XKB_CONFIG_ROOT
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libgtk2.0-0
+      - libgdk-pixbuf2.0-0
+      - libglib2.0-bin
+      - libgtk2.0-bin
+      - unity-gtk2-module
+      - locales-all
+      - libappindicator1
+      - xdg-user-dirs
+      - ibus-gtk
+      - libibus-1.0-5
+
+  subtitle-edit:
+    after: ["desktop-gtk2"]
+    source: "./subtitleedit/SubtitleEdit-3.5.11.zip"
+    plugin: dump
+    organize:
+      "*" : subedit/
+
+#dump plugin fucks everything up unless we do this
+  subedit-dependencies:
+    plugin: nil
+    stage-packages:
+      - libhunspell-dev
+      - mplayer
+      - libdvdcss2
+      - libqtgui4
+      - libmpv1
+      - libmpv-dev 
+      - libvlc-dev
+      - vlc  
+      - ttf-mscorefonts-installer
+      - libgpm2
+      - libglu1-mesa
+      - freeglut3
+      - libslang2
+#    stage:
+#      [-usr/bin/cvlc]
+
+  tesseract:
+    after: ["snapcraft-preload"]
+    source: https://github.com/tesseract-ocr/tesseract.git
+    source-tag: "4.1"
+    plugin: autotools
+    build-packages:
+      - g++
+      - autoconf
+      - automake
+      - libtool
+      - pkg-config
+      - libpng-dev
+      - libjpeg8-dev
+      - libtiff5-dev
+      - libleptonica-dev
+      - zlib1g-dev
+    stage-packages:
+      - libgomp1
+      - liblept5
+      - libopenjp2-7
+      - libwebp6
+
+  snapcraft-preload:
+    source: https://github.com/sergiusens/snapcraft-preload.git
+    plugin: cmake
+    build-packages:
+      - on amd64:
+        - gcc-multilib
+        - g++-multilib
+    stage-packages:
+      - lib32gcc1
+      - lib32stdc++6
+      - libc6-i386
+      
+
+  config:
+    after: ["subedit-dependencies", "desktop-gtk2", "tesseract"]
+    source: "./config"
+    plugin: dump
+    override-pull: |
+      snapcraftctl pull
+      rm -f *.traineddata*
+      wget https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata
+      wget https://github.com/tesseract-ocr/tessdata/raw/master/osd.traineddata
+    organize:
+      "subtitle-edit.wrapper": bin/subtitle-edit
