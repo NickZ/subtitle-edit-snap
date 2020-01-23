@@ -94,7 +94,6 @@ parts:
     organize:
       "*" : subedit/
 
-#dump plugin fucks everything up unless we do this
   subedit-dependencies:
     plugin: nil
     stage-packages:
@@ -103,16 +102,13 @@ parts:
       - libdvdcss2
       - libqtgui4
       - libmpv1
-      - libmpv-dev 
-      - libvlc-dev
+      - libmpv-dev
       - vlc  
       - ttf-mscorefonts-installer
       - libgpm2
       - libglu1-mesa
       - freeglut3
       - libslang2
-#    stage:
-#      [-usr/bin/cvlc]
 
   tesseract:
     after: ["snapcraft-preload"]
@@ -147,10 +143,8 @@ parts:
       - lib32gcc1
       - lib32stdc++6
       - libc6-i386
-      
 
   config:
-    after: ["subedit-dependencies", "desktop-gtk2", "tesseract"]
     source: "./config"
     plugin: dump
     override-pull: |
@@ -160,3 +154,4 @@ parts:
       wget https://github.com/tesseract-ocr/tessdata/raw/master/osd.traineddata
     organize:
       "subtitle-edit.wrapper": bin/subtitle-edit
+      "*.traineddata": share/tessdata/
