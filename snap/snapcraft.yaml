@@ -3,14 +3,20 @@ version: '3.5.13-1'
 grade: stable
 confinement: devmode
 base: core18
-summary: Subtitle Edit
-description: Subtitle Edit 
+summary: The subtitle editor :)
+description: "Subtitle Edit is a free (open source) editor for video subtitles - a subtitle editor :)
+
+With SE you can easily adjust a subtitle if it is out of sync with the video in several different ways.
+You can also use SE for making new subtitles from scratch (do use the time-line/waveform/spectrogram) or translating subtitles."
 
 layout:
   /usr/share/.mono:
     bind: $SNAP_COMMON/.mono
   /usr/bin/vlc:
     bind-file: $SNAP/usr/bin/vlc
+  $SNAP/usr/etc/mono:
+    bind: $SNAP/etc/mono
+  
 
 environment:
   DATA_FOLDER_OVERRIDE: $SNAP_USER_DATA
@@ -109,6 +115,12 @@ parts:
       - libglu1-mesa
       - freeglut3
       - libslang2
+      - libtinfo5 
+      - libncursesw5
+      - libbz2-1.0
+      - samba-libs
+      - ffmpeg
+      - mesa-utils
 
   tesseract:
     after: ["snapcraft-preload"]

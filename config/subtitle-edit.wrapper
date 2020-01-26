@@ -1,25 +1,16 @@
 #!/bin/bash
 
-#this is to prevent vlc from crashing
-VENDOR=$(glxinfo | grep "OpenGL vendor")
-
-if [[ $VENDOR == *"Intel"* ]]; then
-  export VDPAU_DRIVER_PATH="$SNAP/usr/lib/$ARCH/dri"
-  export LIBVA_DRIVERS_PATH="$SNAP/usr/lib/$ARCH/dri"
-fi
-
-if [[ $VENDOR == *"NVIDIA"* ]]; then
-  export VDPAU_DRIVER_PATH="/var/lib/snapd/lib/gl/vdpau"
-elif [[ $VENDOR == *"X.Org"* ]]; then
-  export VDPAU_DRIVER_PATH="/usr/lib/$ARCH/vdpau/"
-fi
-#vlc stuff
-
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$SNAP/usr/lib/vlc"
-
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$SNAP/usr/lib/vlc:$SNAP/usr/lib/x86_64-linux-gnu/samba"
 if [[ ! -d $SNAP_USER_DATA/tessdata ]]; then
     cp -R $SNAP/share/tessdata $SNAP_USER_DATA
 fi
+if [[ ! -d $SNAP_USER_DATA/Dictionaries ]]; then
+    cp -R $SNAP/subedit/Dictionaries $SNAP_USER_DATA
+fi
+if [[ ! -d $SNAP_USER_DATA/Ocr ]]; then
+    cp -R $SNAP/subedit/Ocr $SNAP_USER_DATA
+fi
+
 mkdir $SNAP_USER_DATA/tmp
 echo "LD Library path is: "
 echo $LD_LIBRARY_PATH
