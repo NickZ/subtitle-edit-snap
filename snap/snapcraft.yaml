@@ -14,9 +14,6 @@ layout:
     bind: $SNAP_COMMON/.mono
   /usr/bin/vlc:
     bind-file: $SNAP/usr/bin/vlc
-  $SNAP/usr/etc/mono:
-    bind: $SNAP/etc/mono
-  
 
 environment:
   DATA_FOLDER_OVERRIDE: $SNAP_USER_DATA
@@ -24,6 +21,7 @@ environment:
   TEMP: $SNAP_USER_DATA/tmp
   TMPDIR: $SNAP_USER_DATA/tmp
   TESSERACT4_OVERRIDE: $SNAP_USER_DATA/tessdata
+  MONO_CFG_DIR: $SNAP/etc
   MONO_CONFIG: $SNAP/etc/mono/config
   MONO_GAC_PREFIX: $SNAP/usr/lib/mono
 
@@ -65,6 +63,7 @@ parts:
     - libglib2.0-cil
     - libgtk2.0-0
     - fonts-freefont-ttf
+    - ca-certificates-mono
 
   desktop-gtk2:
     after: ["snapcraft-preload"]
