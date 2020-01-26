@@ -2,11 +2,9 @@
 
 This package makes it very easy to run subtitle-edit on Linux.
 
-[Download here](https://github.com/NickZ/subtitle-edit-snap/releases)
-
 To install, run:
 
-`sudo snap install --dangerous subtitle-edit*.snap`
+`sudo snap install --edge subtitle-edit`
 
 After installation, please run these commands or it will not work:
 
