@@ -4,7 +4,7 @@ This package makes it very easy to run subtitle-edit on Linux.
 
 To install, run:
 
-`sudo snap install --dangerous --devmode subtitle-edit*.snap`
+`sudo snap install --dangerous subtitle-edit*.snap`
 
 After installation, please run these commands or it will not work:
 
