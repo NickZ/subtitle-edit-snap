@@ -89,7 +89,7 @@ parts:
 
   subtitle-edit:
     after: ["desktop-gtk2"]
-    source: "./subtitleedit/SubtitleEdit-3.5.11.zip"
+    source: "./subtitleedit/SubtitleEdit-3.5.13.zip"
     plugin: dump
     organize:
       "*" : subedit/
