@@ -1,7 +1,7 @@
 name: subtitle-edit
 version: '3.5.13-1'
 grade: stable
-confinement: devmode
+confinement: strict
 base: core18
 summary: The subtitle editor :)
 description: "Subtitle Edit is a free (open source) editor for video subtitles - a subtitle editor :)
@@ -41,6 +41,7 @@ apps:
     - "home"
     - "desktop"
     - "desktop-legacy"
+    - "mount-observe"
     - "network"
     - "network-bind"
     - "opengl"

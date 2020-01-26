@@ -11,4 +11,5 @@ After installation, please run these commands or it will not work:
 ```
 sudo snap connect subtitle-edit:alsa :alsa
 sudo snap connect subtitle-edit:removable-media :removable-media
+sudo snap connect subtitle-edit:mount-observe :mount-observe
 ```
