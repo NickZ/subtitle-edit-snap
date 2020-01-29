@@ -22,7 +22,7 @@ class YourPlugin(snapcraft.BasePlugin):
     @property
     def PLUGIN_STAGE_SOURCES(self):
         mono_repo = "https://download.mono-project.com/repo/ubuntu/"
-        ubuntu_repo = "http://${prefix}.ubuntu.com/${suffix}/"
+        ubuntu_repo = "http://us.${prefix}.ubuntu.com/${suffix}/"
         security_repo = "http://${security}.ubuntu.com/${suffix}/"
 
         return textwrap.dedent(

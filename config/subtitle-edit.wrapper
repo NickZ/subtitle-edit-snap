@@ -1,19 +1,32 @@
 #!/bin/bash
 
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$SNAP/usr/lib/vlc:$SNAP/usr/lib/x86_64-linux-gnu/samba"
-if [[ ! -d $SNAP_USER_DATA/tessdata ]]; then
-    cp -R $SNAP/share/tessdata $SNAP_USER_DATA
+echo "SE data folder is $SE_DATA_FOLDER_OVERRIDE"
+if [[ ! -d $SE_DATA_FOLDER_OVERRIDE ]]; then
+    mkdir $SE_DATA_FOLDER_OVERRIDE
 fi
-if [[ ! -d $SNAP_USER_DATA/Dictionaries ]]; then
-    cp -R $SNAP/subedit/Dictionaries $SNAP_USER_DATA
+if [[ ! -d $SE_DATA_FOLDER_OVERRIDE/tessdata ]]; then
+    cp -R $SNAP/share/tessdata $SE_DATA_FOLDER_OVERRIDE
 fi
-if [[ ! -d $SNAP_USER_DATA/Ocr ]]; then
-    cp -R $SNAP/subedit/Ocr $SNAP_USER_DATA
+if [[ ! -d $SE_DATA_FOLDER_OVERRIDE/Dictionaries ]]; then
+    cp -R $SNAP/subedit/Dictionaries $SE_DATA_FOLDER_OVERRIDE
+fi
+if [[ ! -d $SE_DATA_FOLDER_OVERRIDE/Ocr ]]; then
+    cp -R $SNAP/subedit/Ocr $SE_DATA_FOLDER_OVERRIDE
+fi
+#TODO: make this a configure hook
+if [[ ! -f $SE_DATA_FOLDER_OVERRIDE/default_font_override ]]; then
+    cp $SNAP/config/default_font_override $SE_DATA_FOLDER_OVERRIDE
+    source $SE_DATA_FOLDER_OVERRIDE/default_font_override
+fi
+if [[ ! -d $SNAP_USER_DATA/tmp ]]; then
+    mkdir $SNAP_USER_DATA/tmp
+fi
+if [[ ! -d $SNAP_USER_DATA/home ]]; then
+    ln -s /home $SNAP_USER_DATA/home
+fi
+if [[ ! -d $SNAP_USER_DATA/root ]]; then
+    ln -s / $SNAP_USER_DATA/root
 fi
 
-mkdir $SNAP_USER_DATA/tmp
-echo "LD Library path is: "
-echo $LD_LIBRARY_PATH
-echo "PATH is: "
-echo $PATH
 mono $@ $SNAP/subedit/SubtitleEdit.exe

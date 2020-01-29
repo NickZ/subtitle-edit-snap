@@ -1,5 +1,5 @@
 name: subtitle-edit
-version: '3.5.13-1'
+version: '3.5.13-2'
 grade: stable
 confinement: strict
 base: core18
@@ -15,12 +15,18 @@ layout:
   /usr/bin/vlc:
     bind-file: $SNAP/usr/bin/vlc
 
+hooks:
+  configure:
+    plugs:
+      - network
+
 environment:
-  DATA_FOLDER_OVERRIDE: $SNAP_USER_DATA
+  SE_DATA_FOLDER_OVERRIDE: $SNAP_USER_DATA/se_data
   TMP: $SNAP_USER_DATA/tmp
   TEMP: $SNAP_USER_DATA/tmp
   TMPDIR: $SNAP_USER_DATA/tmp
-  TESSERACT4_OVERRIDE: $SNAP_USER_DATA/tessdata
+  TESSDATA_PREFIX: $SE_DATA_FOLDER_OVERRIDE/tessdata
+  SE_TESSERACT4_OVERRIDE: $SE_DATA_FOLDER_OVERRIDE/tessdata
   MONO_CFG_DIR: $SNAP/etc
   MONO_CONFIG: $SNAP/etc/mono/config
   MONO_GAC_PREFIX: $SNAP/usr/lib/mono
@@ -109,18 +115,52 @@ parts:
       - libqtgui4
       - libmpv1
       - libmpv-dev
-      - vlc  
-      - ttf-mscorefonts-installer
+      - vlc
       - libgpm2
       - libglu1-mesa
       - freeglut3
       - libslang2
-      - libtinfo5 
+      - libtinfo5
       - libncursesw5
       - libbz2-1.0
       - samba-libs
       - ffmpeg
       - mesa-utils
+      # fonts for localization purposes:
+      - fonts-arabeyes
+      - fonts-beng
+      - fonts-deva
+      - fonts-droid-fallback
+      - fonts-farsiweb
+      - fonts-gargi
+      - fonts-gubbi
+      - fonts-gujr
+      - fonts-guru
+      - fonts-indic
+      - fonts-hosny-amiri
+      - fonts-kacst
+      - fonts-kacst-one
+      - fonts-khmeros-core
+      - fonts-knda
+      - fonts-lao
+      - fonts-liberation
+      - fonts-liberation2
+      - fonts-lklug-sinhala
+      - fonts-manchufont
+      - fonts-mlym
+      - fonts-nafees
+      - fonts-noto-cjk
+      - fonts-noto-mono
+      - fonts-orya
+      - fonts-roboto-slab
+      - fonts-sil-abyssinica
+      - fonts-sil-ezra
+      - fonts-sil-nuosusil
+      - fonts-sil-padauk
+      - fonts-sil-scheherazade
+      - fonts-thai-tlwg
+      - fonts-tibetan-machine
+      - fonts-ukij-uyghur
 
   tesseract:
     after: ["snapcraft-preload"]
@@ -159,6 +199,7 @@ parts:
   config:
     source: "./config"
     plugin: dump
+    #always download latest trainingdata
     override-pull: |
       snapcraftctl pull
       rm -f *.traineddata*
@@ -167,3 +208,4 @@ parts:
     organize:
       "subtitle-edit.wrapper": bin/subtitle-edit
       "*.traineddata": share/tessdata/
+      "default_font_override": config/default_font_override

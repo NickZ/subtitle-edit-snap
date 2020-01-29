@@ -4,22 +4,13 @@
 
 #Check if debian certificate store exists and is readable
 if [[ -r /etc/ssl/certs/ca-certificates.crt ]]; then
-	if ! ls /etc/ssl/certs; then
-		echo "Could not read certificate store, skipping..."
-		exit 0
-	fi
-	tail /etc/ssl/certs/ca-certificates.crt
 	$SNAP/usr/bin/mono $SNAP/usr/lib/mono/4.5/cert-sync.exe /etc/ssl/certs/ca-certificates.crt
 #Check if red hat certificate store exists and is readable
 elif [[ -r /etc/pki/tls/certs/ca-bundle.crt ]]; then
-	if ! ls /etc/pki/tls/certs; then
-		echo "Could not read certificate store, skipping..."
-		exit 0
-	fi
 	$SNAP/usr/bin/mono $SNAP/usr/lib/mono/4.5/cert-sync.exe /etc/pki/tls/certs/ca-bundle.crt
 else
 	echo "COULD NOT FIND CERTIFICATE STORE, PLEASE REPORT THIS BUG ALONG WITH YOUR DISTRO NAME!!"
 	echo "https://github.com/NickZ/subtitle-edit-snap"
-	#exit -1
+	exit -1
 fi
 
