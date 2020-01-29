@@ -62,13 +62,11 @@ parts:
     - libmono-corlib4.5-cil
     - libmono-system-windows-forms4.0-cil
     - libmono-system-runtime4.0-cil
-    - fontconfig-config
     - libgdiplus
     - libcairo2
     - libglib2.0-0
     - libglib2.0-cil
     - libgtk2.0-0
-    - fonts-freefont-ttf
     - ca-certificates-mono
 
   desktop-gtk2:
@@ -82,7 +80,6 @@ parts:
       - libgtk2.0-dev
     stage-packages:
       - libxkbcommon0  # XKB_CONFIG_ROOT
-      - ttf-ubuntu-font-family
       - dmz-cursor-theme
       - light-themes
       - adwaita-icon-theme
@@ -100,7 +97,6 @@ parts:
       - libibus-1.0-5
 
   subtitle-edit:
-    after: ["desktop-gtk2"]
     source: "./subtitleedit/SubtitleEdit-3.5.13.zip"
     plugin: dump
     organize:
@@ -126,41 +122,6 @@ parts:
       - samba-libs
       - ffmpeg
       - mesa-utils
-      # fonts for localization purposes:
-      - fonts-arabeyes
-      - fonts-beng
-      - fonts-deva
-      - fonts-droid-fallback
-      - fonts-farsiweb
-      - fonts-gargi
-      - fonts-gubbi
-      - fonts-gujr
-      - fonts-guru
-      - fonts-indic
-      - fonts-hosny-amiri
-      - fonts-kacst
-      - fonts-kacst-one
-      - fonts-khmeros-core
-      - fonts-knda
-      - fonts-lao
-      - fonts-liberation
-      - fonts-liberation2
-      - fonts-lklug-sinhala
-      - fonts-manchufont
-      - fonts-mlym
-      - fonts-nafees
-      - fonts-noto-cjk
-      - fonts-noto-mono
-      - fonts-orya
-      - fonts-roboto-slab
-      - fonts-sil-abyssinica
-      - fonts-sil-ezra
-      - fonts-sil-nuosusil
-      - fonts-sil-padauk
-      - fonts-sil-scheherazade
-      - fonts-thai-tlwg
-      - fonts-tibetan-machine
-      - fonts-ukij-uyghur
 
   tesseract:
     after: ["snapcraft-preload"]
