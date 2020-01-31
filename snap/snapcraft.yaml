@@ -1,5 +1,5 @@
 name: subtitle-edit
-version: '3.5.13-2'
+version: '3.5.13-3'
 grade: stable
 confinement: strict
 base: core18
@@ -30,6 +30,9 @@ environment:
   MONO_CFG_DIR: $SNAP/etc
   MONO_CONFIG: $SNAP/etc/mono/config
   MONO_GAC_PREFIX: $SNAP/usr/lib/mono
+  GTK_PATH: $SNAP/lib/gtk-2.0
+  GTK_DATA_PREFIX: $SNAP
+  XDG_DATA_DIRS: $SNAP/share:$XDG_DATA_DIRS
 
 apps:
   subtitle-edit:
@@ -37,7 +40,6 @@ apps:
     command: bin/subtitle-edit
     command-chain:
       - bin/desktop-launch
-      - bin/snapcraft-preload
     common-id: com.nikse.subtitle-edit
     plugs:
     - "alsa"
@@ -45,6 +47,7 @@ apps:
     - "home"
     - "desktop"
     - "desktop-legacy"
+    - "gsettings"
     - "mount-observe"
     - "network"
     - "network-bind"
@@ -54,20 +57,32 @@ apps:
     - "x11"
     - "wayland"
 
+plugs:
+  gtk-2-engines:
+    interface: content
+    target: $SNAP/lib/gtk-2.0
+    default-provider: gtk2-common-themes
+  gtk-2-themes:
+    interface: content
+    target: $SNAP/share/themes
+    default-provider: gtk2-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/share/icons
+    default-provider: gtk-common-themes
+
 parts:
   mono:
     plugin: myplugin
     stage-packages:
-    - mono-complete
+    - mono-runtime
     - libmono-corlib4.5-cil
     - libmono-system-windows-forms4.0-cil
     - libmono-system-runtime4.0-cil
     - libgdiplus
     - libcairo2
-    - libglib2.0-0
-    - libglib2.0-cil
-    - libgtk2.0-0
     - ca-certificates-mono
+    - libglib2.0-cil
 
   desktop-gtk2:
     after: ["snapcraft-preload"]
@@ -80,10 +95,6 @@ parts:
       - libgtk2.0-dev
     stage-packages:
       - libxkbcommon0  # XKB_CONFIG_ROOT
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
       - shared-mime-info
       - libgtk2.0-0
       - libgdk-pixbuf2.0-0
@@ -91,20 +102,10 @@ parts:
       - libgtk2.0-bin
       - unity-gtk2-module
       - locales-all
+      - libgtk2.0-common
       - libappindicator1
       - xdg-user-dirs
-      - ibus-gtk
-      - libibus-1.0-5
-
-  subtitle-edit:
-    source: "./subtitleedit/SubtitleEdit-3.5.13.zip"
-    plugin: dump
-    organize:
-      "*" : subedit/
-
-  subedit-dependencies:
-    plugin: nil
-    stage-packages:
+      #subedit dependencies
       - libhunspell-dev
       - mplayer
       - libdvdcss2
@@ -122,6 +123,12 @@ parts:
       - samba-libs
       - ffmpeg
       - mesa-utils
+
+  subtitle-edit:
+    source: "./subtitleedit/SubtitleEdit-3.5.13.zip"
+    plugin: dump
+    organize:
+      "*" : subedit/
 
   tesseract:
     after: ["snapcraft-preload"]
