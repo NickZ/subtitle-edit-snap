@@ -168,11 +168,16 @@ parts:
     source: "./config"
     plugin: dump
     #always download latest trainingdata
+    #chmod to fix when building on windows
     override-pull: |
       snapcraftctl pull
       rm -f *.traineddata*
       wget https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata
       wget https://github.com/tesseract-ocr/tessdata/raw/master/osd.traineddata
+      chown root:root *
+      chmod 755 subtitle-edit.wrapper
+      chmod 644 *.traineddata
+      chmod 644 default_font_override
     organize:
       "subtitle-edit.wrapper": bin/subtitle-edit
       "*.traineddata": share/tessdata/
