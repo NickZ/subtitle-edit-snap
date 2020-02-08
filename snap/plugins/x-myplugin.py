@@ -42,11 +42,13 @@ class YourPlugin(snapcraft.BasePlugin):
 
     def __init__(self, name, options, project):
         super().__init__(name, options, project)
-        
-        super().run(cmd = ["/usr/bin/apt-key", 
+        try:
+            super().run(cmd = ["/usr/bin/apt-key", 
                             "adv", 
                             "--keyserver", 
                             "hkp://keyserver.ubuntu.com:80", 
                             "--recv-keys", 
                             "3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF"], 
-                    cwd=None)
+                        cwd=None)
+        except:
+            print("Could not add key to keychain")

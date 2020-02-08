@@ -1,5 +1,5 @@
 name: subtitle-edit
-version: '3.5.13-3'
+version: '3.5.13-4'
 grade: stable
 confinement: strict
 base: core18
