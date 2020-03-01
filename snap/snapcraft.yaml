@@ -174,10 +174,12 @@ parts:
       rm -f *.traineddata*
       wget https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata
       wget https://github.com/tesseract-ocr/tessdata/raw/master/osd.traineddata
+    override-build: |
       chown root:root *
       chmod 755 subtitle-edit.wrapper
       chmod 644 *.traineddata
       chmod 644 default_font_override
+      snapcraftctl build
     organize:
       "subtitle-edit.wrapper": bin/subtitle-edit
       "*.traineddata": share/tessdata/
